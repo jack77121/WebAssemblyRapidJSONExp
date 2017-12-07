@@ -35,7 +35,7 @@ public:
     // Insert
     void        Add_KeyInt(const std::string&, const int&);
     void        Add_KeyString(const std::string&, const std::string&);
-
+    void        Add_Array(const std::string&);
     
     // std::map<std::string, int> Getmap();
     // std::vector< std::map<std::string, int> >Getmap2();
@@ -158,6 +158,14 @@ void MyJson::Add_KeyString(const std::string& name2, const std::string& str_valu
 
 
 
+
+
+
+
+void MyJson::Add_Array(const std::string& insertArray) {
+    // pending XD
+}
+
 EMSCRIPTEN_BINDINGS(module) {
   class_<MyJson>("MyJson")
     .constructor<const std::string&>()
@@ -170,5 +178,7 @@ EMSCRIPTEN_BINDINGS(module) {
     .function("SetSupply", &MyJson::SetSupply)
     .function("Add_KeyInt", &MyJson::Add_KeyInt)
     .function("Add_KeyString", &MyJson::Add_KeyString)
+
+    .function("Add_Array", &MyJson::Add_Array)
     ;
 }
