@@ -21,17 +21,17 @@ using namespace emscripten;
 #define VALUE_NOT_FOUND -1
 
 
-class MyJson {
+class MyContract {
 public:
     // initial
-    MyJson(const std::string&);
+    MyContract(const std::string&);
     
     // Read
     std::string GetName();
     int         GetSupply();
-    int         GetMap(const std::string&);
-    int         GetMap2(const std::string&);
-    std::string GetMyJson();
+    int         GetBalance(const std::string&);
+    // int         GetMap2(const std::string&);
+    std::string GetMyContract();
 
     // Modify
     void        SetName(const std::string&);
@@ -44,7 +44,7 @@ public:
     // void        Add_MemberIntoArray(const std::string&, const std::string&, const std::string&);
 
     // Contract functoin
-    int TransferCoin_A2B(const std::string&, const std::string&, const int&);
+    std::string TransferCoin_A2B(const std::string&, const std::string&, const int&);
 
 
     // std::map<std::string, int> Getmap();
@@ -58,14 +58,14 @@ private:
     Value*      _name;
     Value*      _total_supply;
     Value*      _ownerAddr;
-    Value*      _hash
+    Value*      _hash;
     Value*      _mapping;
     Value*      _id;
 
 };
 
 
-MyJson::MyJson(const std::string& temp){
+MyContract::MyContract(const std::string& temp){
     const char* inpuJSON = temp.c_str();
     _myJSONDoc.Parse(inpuJSON);
     // Name
@@ -113,19 +113,19 @@ MyJson::MyJson(const std::string& temp){
 }
 
 
-std::string MyJson::GetName() {
+std::string MyContract::GetName() {
     std::string tempName = _name->GetString();
     return tempName;
 }
 
-int MyJson::GetSupply() {
+int MyContract::GetSupply() {
     int tempSup = _total_supply->GetInt();
     return tempSup;
 }
 
-int MyJson::GetMap(const std::string& findName) {
-    if(_map->HasMember(findName.c_str())) {
-        int valueOfName = (*_map)[findName.c_str()].GetInt();
+int MyContract::GetBalance(const std::string& findName) {
+    if(_mapping->HasMember(findName.c_str())) {
+        int valueOfName = (*_mapping)[findName.c_str()].GetInt();
         return valueOfName;
     }
     else {
@@ -133,18 +133,18 @@ int MyJson::GetMap(const std::string& findName) {
     }
      
 }
+// JSON array
+// int MyContract::GetMap2(const std::string& findName) {
+//     for (Value::ConstValueIterator arrayitr = _map2->Begin(); arrayitr != _map2->End(); ++arrayitr) {
 
-int MyJson::GetMap2(const std::string& findName) {
-    for (Value::ConstValueIterator arrayitr = _map2->Begin(); arrayitr != _map2->End(); ++arrayitr) {
+//         if(arrayitr->HasMember(findName.c_str())) {
+//             return (*arrayitr)[findName.c_str()].GetInt();
+//         }
+//     }
+//     return VALUE_NOT_FOUND;
+// }
 
-        if(arrayitr->HasMember(findName.c_str())) {
-            return (*arrayitr)[findName.c_str()].GetInt();
-        }
-    }
-    return VALUE_NOT_FOUND;
-}
-
-std::string MyJson::GetMyJson() {
+std::string MyContract::GetMyContract() {
     StringBuffer buffer;
     Writer<StringBuffer> writer(buffer);
     _myJSONDoc.Accept(writer);
@@ -153,20 +153,20 @@ std::string MyJson::GetMyJson() {
     return myJSON;
 }
 
-void MyJson::SetName(const std::string& changeName) {
+void MyContract::SetName(const std::string& changeName) {
     _name->SetString(changeName.c_str(), _myJSONDoc.GetAllocator());
 }
 
-void MyJson::SetSupply(const int& changeSupply) {
+void MyContract::SetSupply(const int& changeSupply) {
     _total_supply->SetInt(changeSupply);
 }
 
 /**
- * Add_KeyInt - Add a key, integer pair into your current JSON object (MyJson)
- * Add_KeyInt - Add a key, string pair into your current JSON object (MyJson)
+ * Add_KeyInt - Add a key, integer pair into your current JSON object (MyContract)
+ * Add_KeyInt - Add a key, string pair into your current JSON object (MyContract)
  * These two function might merge into one function in the "future" XD
 */
-void MyJson::Add_KeyInt(const std::string& name, const int& value) {
+void MyContract::Add_KeyInt(const std::string& name, const int& value) {
     Value intObject(kNumberType); 
     Value strObject;
     strObject.SetString(name.c_str(), name.size(), _myJSONDoc.GetAllocator());
@@ -174,7 +174,7 @@ void MyJson::Add_KeyInt(const std::string& name, const int& value) {
     _myJSONDoc.AddMember(strObject, intObject, _myJSONDoc.GetAllocator());
 }
 
-void MyJson::Add_KeyString(const std::string& name2, const std::string& str_value) {
+void MyContract::Add_KeyString(const std::string& name2, const std::string& str_value) {
     Value nameObj(kStringType);
     Value strValueObj(kStringType);
     nameObj.SetString(name2.c_str(), name2.size(), _myJSONDoc.GetAllocator());
@@ -184,37 +184,53 @@ void MyJson::Add_KeyString(const std::string& name2, const std::string& str_valu
 
 
 
-// void MyJson::Add_MemberIntoArray(const std::string& arrayKey, const std::string& insertKey, const std::string& insertValue) {
+// void MyContract::Add_MemberIntoArray(const std::string& arrayKey, const std::string& insertKey, const std::string& insertValue) {
 //     Value& targetArray = _myJSONDoc["map2"];
     
 //     targetArray.PushBack("test", "test1", _myJSONDoc.GetAllocator());
 // }
 
 
-//
-int MyJson::TransferCoin_A2B(const std::string& A, const std::string& B, const int&) {
+/**
+ * TransferCoin_A2B - Transfer Coin from A to B
+ * Input:   (A's address, B's address, Transfer amount)
+ * Output:  Current contract state in JSON format
+*/ 
+std::string MyContract::TransferCoin_A2B(const std::string& A, const std::string& B, const int& transferValue) {
     std::string result;
-    Value& mapping = _myJSONDoc[MAP];
-    int temp mapping[A.c_str()].GetInt();
+    
+    (*_mapping)[A.c_str()].SetInt((*_mapping)[A.c_str()].GetInt()-transferValue);
+    if((*_mapping).HasMember(B.c_str())) {
+        (*_mapping)[B.c_str()].SetInt((*_mapping)[B.c_str()].GetInt()+transferValue);
+    }
+    else {
+        Value intObject(kNumberType); 
+        Value strObject;
+        strObject.SetString(B.c_str(), B.size(), _myJSONDoc.GetAllocator());
+        intObject.SetInt(transferValue);
+        _mapping->AddMember(strObject, intObject, _myJSONDoc.GetAllocator());
+    }
 
 
-    return temp;
+
+    return GetMyContract();
 }
 
 
 
 EMSCRIPTEN_BINDINGS(module) {
-  class_<MyJson>("MyJson")
+  class_<MyContract>("MyContract")
     .constructor<const std::string&>()
-    .function("GetName", &MyJson::GetName)
-    .function("GetSupply", &MyJson::GetSupply)
-    .function("GetMap", &MyJson::GetMap)
-    .function("GetMap2", &MyJson::GetMap2)
-    .function("GetMyJson", &MyJson::GetMyJson)
-    .function("SetName", &MyJson::SetName)
-    .function("SetSupply", &MyJson::SetSupply)
-    .function("Add_KeyInt", &MyJson::Add_KeyInt)
-    .function("Add_KeyString", &MyJson::Add_KeyString)
-    // .function("Add_MemberIntoArray", &MyJson::Add_MemberIntoArray)
+    .function("GetName", &MyContract::GetName)
+    .function("GetSupply", &MyContract::GetSupply)
+    .function("GetBalance", &MyContract::GetBalance)
+    // .function("GetMap2", &MyContract::GetMap2)
+    .function("GetMyContract", &MyContract::GetMyContract)
+    .function("SetName", &MyContract::SetName)
+    .function("SetSupply", &MyContract::SetSupply)
+    .function("Add_KeyInt", &MyContract::Add_KeyInt)
+    .function("Add_KeyString", &MyContract::Add_KeyString)
+    // .function("Add_MemberIntoArray", &MyContract::Add_MemberIntoArray)
+    .function("TransferCoin_A2B", &MyContract::TransferCoin_A2B)
     ;
 }

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head><title>WebAssembly test</title><meta charset='utf-8'></head>
+<body>
+    <script src="json_handler.js"></script>
+
+    <script>
+
+        var myJSON = '{"name": "1JaB9WqLm8zqTnX6bjWfRqRKacKXnpJvuo","totalSupply": 5000,"ownerAddress": "13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3","hash": "dqzzrzwfgurkeplhjienubimst","mapping": {"13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3": 100},"id": "dqzzrzwfgurkeplhjienubimst"}';
+        
+        var instance = new Module.MyContract(myJSON);
+
+        var initial_JSON = instance.GetMyContract();
+        document.write("Your current contract in C++ class:");
+        document.write("<br>");
+        document.write(initial_JSON);
+        document.write("<br><br><br>");
+
+        
+
+        var balance = instance.GetBalance("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3");
+        document.write("Your current balance in C++ contract:");
+        document.write("<br>");
+        document.write(balance);
+        document.write("<br><br><br>");
+
+       
+        
+        
+        var contractAfterTransfer = instance.TransferCoin_A2B("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3", "1338vM2p3wSm5ma3tNXGJRWAhbuJUTZ9du", 200);
+        document.write("Your contract after transfer 5 coins value:");
+        document.write("<br>");
+        document.write(contractAfterTransfer);
+        document.write("<br><br><br>");
+
+
+
+        var balance = instance.GetBalance("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3");
+        document.write("Your current balance after transfer 5 coins in C++ contract:");
+        document.write("<br>");
+        document.write(balance);
+        document.write("<br><br><br>");
+
+        
+        
+
+        var final_JSON = instance.GetMyContract();
+        document.write("Your final contract state in C++ class:");
+        document.write("<br>");
+        document.write(final_JSON);
+        document.write("<br><br><br>");
+
+
+    </script>
+
+</body>
+
+</html>
