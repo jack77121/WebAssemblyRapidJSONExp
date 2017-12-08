@@ -6,7 +6,7 @@
 
     <script>
 
-        var mystring = '{"name": "ddd","total_supply": 6,"map": {"a": -2,"b": 87,"c": 4},"map2": [{"a":0},{"c":7}]}';
+        var mystring = '{"name": "1JaB9WqLm8zqTnX6bjWfRqRKacKXnpJvuo","totalSupply": 5000,"ownerAddress": "13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3","hash": "dqzzrzwfgurkeplhjienubimst","mapping": {"13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3": 100},"id": "dqzzrzwfgurkeplhjienubimst"}';
         
         var instance = new Module.MyJson(mystring);
 
@@ -75,6 +75,11 @@
         instance.Add_KeyString("hahaha", "kerkerker");
 
         instance.Add_KeyString("zzz", "hhhh");
+
+        instance.Add_KeyString("zzz", "hhhh");
+
+
+        instance.Add_MemberIntoArray("map2", "123", "123");
 
         var final_JSON = instance.GetMyJson();
         document.write("JSON after add key string:");

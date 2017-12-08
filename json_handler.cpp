@@ -8,11 +8,16 @@
 using namespace rapidjson;
 using namespace emscripten;
 
-
+// define JSON key
 #define NAME "name"
-#define TOTAL_SUP "total_supply"
-#define MAP "map"
-#define MAP_2 "map2"
+#define TOTAL_SUP "totalSupply"
+#define OWNER_ADDR "ownerAddress"
+#define CONTRACT_HASH "hash"
+#define MAP "mapping"
+#define ID "id"
+
+// ERROR number
+#define INSUFFICIENT_BALANCE "001"
 #define VALUE_NOT_FOUND -1
 
 
@@ -36,7 +41,12 @@ public:
     void        Add_KeyInt(const std::string&, const int&);
     void        Add_KeyString(const std::string&, const std::string&);
     void        Add_Array(const std::string&);
-    
+    // void        Add_MemberIntoArray(const std::string&, const std::string&, const std::string&);
+
+    // Contract functoin
+    int TransferCoin_A2B(const std::string&, const std::string&, const int&);
+
+
     // std::map<std::string, int> Getmap();
     // std::vector< std::map<std::string, int> >Getmap2();
 private:
@@ -44,11 +54,13 @@ private:
     // int _total_supply;
     // map<string, int> _myMap;
     // vector<map<string, int>> _myMap2;
-    Document _myJSONDoc;
-    Value* _name;
-    Value* _total_supply;
-    Value* _map;
-    Value* _map2;
+    Document    _myJSONDoc;
+    Value*      _name;
+    Value*      _total_supply;
+    Value*      _ownerAddr;
+    Value*      _hash
+    Value*      _mapping;
+    Value*      _id;
 
 };
 
@@ -56,34 +68,48 @@ private:
 MyJson::MyJson(const std::string& temp){
     const char* inpuJSON = temp.c_str();
     _myJSONDoc.Parse(inpuJSON);
+    // Name
     if(_myJSONDoc.HasMember(NAME)) {
         _name = &_myJSONDoc[NAME];    
     }
     else{
         _name = nullptr;
     }
-
+    // TotalSupply
     if(_myJSONDoc.HasMember(TOTAL_SUP)) {
         _total_supply = &_myJSONDoc[TOTAL_SUP];    
     }
     else{
         _total_supply = nullptr;
     }
-
+    // OwnerAddress
+    if(_myJSONDoc.HasMember(OWNER_ADDR)) {
+        _ownerAddr = &_myJSONDoc[OWNER_ADDR];    
+    }
+    else{
+        _ownerAddr = nullptr;
+    }
+    // Hash
+    if(_myJSONDoc.HasMember(CONTRACT_HASH)) {
+        _hash = &_myJSONDoc[CONTRACT_HASH];    
+    }
+    else{
+        _hash = nullptr;
+    }
+    // Mapping
     if(_myJSONDoc.HasMember(MAP)) {
-        _map = &_myJSONDoc[MAP];    
+        _mapping = &_myJSONDoc[MAP];    
     }
     else{
-        _map = nullptr;
+        _mapping = nullptr;
     }
-
-    if(_myJSONDoc.HasMember(MAP_2)) {
-        _map2 = &_myJSONDoc[MAP_2];    
+    // id
+    if(_myJSONDoc.HasMember(ID)) {
+        _id = &_myJSONDoc[ID];    
     }
     else{
-        _map2 = nullptr;
+        _id = nullptr;
     }
-
 }
 
 
@@ -158,13 +184,24 @@ void MyJson::Add_KeyString(const std::string& name2, const std::string& str_valu
 
 
 
+// void MyJson::Add_MemberIntoArray(const std::string& arrayKey, const std::string& insertKey, const std::string& insertValue) {
+//     Value& targetArray = _myJSONDoc["map2"];
+    
+//     targetArray.PushBack("test", "test1", _myJSONDoc.GetAllocator());
+// }
 
 
+//
+int MyJson::TransferCoin_A2B(const std::string& A, const std::string& B, const int&) {
+    std::string result;
+    Value& mapping = _myJSONDoc[MAP];
+    int temp mapping[A.c_str()].GetInt();
 
 
-void MyJson::Add_Array(const std::string& insertArray) {
-    // pending XD
+    return temp;
 }
+
+
 
 EMSCRIPTEN_BINDINGS(module) {
   class_<MyJson>("MyJson")
@@ -178,7 +215,6 @@ EMSCRIPTEN_BINDINGS(module) {
     .function("SetSupply", &MyJson::SetSupply)
     .function("Add_KeyInt", &MyJson::Add_KeyInt)
     .function("Add_KeyString", &MyJson::Add_KeyString)
-
-    .function("Add_Array", &MyJson::Add_Array)
+    // .function("Add_MemberIntoArray", &MyJson::Add_MemberIntoArray)
     ;
 }
