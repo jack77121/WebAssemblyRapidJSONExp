@@ -5,28 +5,42 @@
     <script src="json_handler.js"></script>
 
     <script>
-
+        // Your contract in JSON format
         var myJSON = '{"name": "1JaB9WqLm8zqTnX6bjWfRqRKacKXnpJvuo","totalSupply": 5000,"ownerAddress": "13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3","hash": "dqzzrzwfgurkeplhjienubimst","mapping": {"13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3": 100},"id": "dqzzrzwfgurkeplhjienubimst"}';
         
+        // Get an instance - MyContract, from json_handler.js
         var instance = new Module.MyContract(myJSON);
 
+        /*  
+            GetMyContract()-
+            description:     Display the current contract in instance
+            Input:           -none-
+            Output:          a JSON about the current contract in string
+        */
         var initial_JSON = instance.GetMyContract();
         document.write("Your current contract in C++ class:");
         document.write("<br>");
         document.write(initial_JSON);
         document.write("<br><br><br>");
 
-        
-
+        /*
+            GetBalance(string address)- 
+            description:     Find an address's balance
+            Input:           An address in string
+            Output:          An integer of address's balance
+        */
         var balance = instance.GetBalance("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3");
         document.write("Your current balance in C++ contract:");
         document.write("<br>");
         document.write(balance);
-        document.write("<br><br><br>");
+        document.write("<br><br><br>1");
 
-       
-        
-        
+        /* 
+            TransferCoin_A2B(string A, string B, int x)-
+            description:     Transfer x coins from address A to address B (w/o checking the balance XD)
+            Input:           address A, address B, x coin
+            Output:          a JSON about the current contract in string
+        */
         var contractAfterTransfer = instance.TransferCoin_A2B("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3", "1338vM2p3wSm5ma3tNXGJRWAhbuJUTZ9du", 200);
         document.write("Your contract after transfer 5 coins value:");
         document.write("<br>");
