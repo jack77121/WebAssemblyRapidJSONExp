@@ -21,7 +21,7 @@
             <textarea id="output_json" rows="20" cols="70"></textarea>
         </div>
     </div>
-    <button id="sample_btn" onclick="Sample()">Show me some sample input</button>
+
 
     <h1>Transfer</h1>
     <h2>Amount</h2><textarea id="coin_amount"></textarea>
@@ -34,8 +34,8 @@
     <script src="json_handler.js"></script>
 
     <script>
+        Sample();
         // Your contract in JSON format
-        // var myJSON = '{"name": "1JaB9WqLm8zqTnX6bjWfRqRKacKXnpJvuo","totalSupply": 5000,"ownerAddress": "13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3","hash": "dqzzrzwfgurkeplhjienubimst","mapping": {"13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3": 100},"id": "dqzzrzwfgurkeplhjienubimst"}';
         var myJSON = document.getElementById('input_json').value;
         // Get an instance - MyContract, from json_handler.js
         var instance = new Module.MyContract(myJSON);
