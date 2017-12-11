@@ -18,6 +18,7 @@ using namespace emscripten;
 
 // ERROR number
 #define INSUFFICIENT_BALANCE "001"
+#define ADDRESS_NOT_FOUND "002"
 #define VALUE_NOT_FOUND -1
 
 
@@ -199,20 +200,29 @@ void MyContract::Add_KeyString(const std::string& name2, const std::string& str_
 std::string MyContract::TransferCoin_A2B(const std::string& A, const std::string& B, const int& transferValue) {
     std::string result;
     
-    (*_mapping)[A.c_str()].SetInt((*_mapping)[A.c_str()].GetInt()-transferValue);
-    if((*_mapping).HasMember(B.c_str())) {
-        (*_mapping)[B.c_str()].SetInt((*_mapping)[B.c_str()].GetInt()+transferValue);
+    if((*_mapping).HasMember(A.c_str())) {
+        // if Address A exist
+        if((*_mapping).HasMember(B.c_str())) {
+            // if Address B exist, Change B's balance
+            (*_mapping)[B.c_str()].SetInt((*_mapping)[B.c_str()].GetInt()+transferValue);
+        }
+        else {
+            // if Address B doesn't exist, set a new one
+            Value intObject(kNumberType); 
+            Value strObject;
+            strObject.SetString(B.c_str(), B.size(), _myJSONDoc.GetAllocator());
+            intObject.SetInt(transferValue);
+            _mapping->AddMember(strObject, intObject, _myJSONDoc.GetAllocator());
+        }
+        // Change A's balance
+        (*_mapping)[A.c_str()].SetInt((*_mapping)[A.c_str()].GetInt()-transferValue);
     }
     else {
-        Value intObject(kNumberType); 
-        Value strObject;
-        strObject.SetString(B.c_str(), B.size(), _myJSONDoc.GetAllocator());
-        intObject.SetInt(transferValue);
-        _mapping->AddMember(strObject, intObject, _myJSONDoc.GetAllocator());
+        // Address A not found, this transaction is invalid
+        return ADDRESS_NOT_FOUND;
     }
 
-
-
+    // contract state result in JSON format    
     return GetMyContract();
 }
 
