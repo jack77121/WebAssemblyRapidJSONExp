@@ -198,8 +198,6 @@ void MyContract::Add_KeyString(const std::string& name2, const std::string& str_
  * Output:  Current contract state in JSON format
 */ 
 std::string MyContract::TransferCoin_A2B(const std::string& A, const std::string& B, const int& transferValue) {
-    std::string result;
-    
     if((*_mapping).HasMember(A.c_str())) {
         // if Address A exist
         if((*_mapping).HasMember(B.c_str())) {
