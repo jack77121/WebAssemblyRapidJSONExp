@@ -1,27 +1,83 @@
 <!DOCTYPE html>
 <html>
-    <head><title>WebAssembly test</title><meta charset='utf-8'></head>
+    <head><title>WebAssembly test</title><meta charset='utf-8'>
+        <style type="text/css">
+            div{margin:0;padding:0;border-color: transparent;}
+            #container{width:1500px;height:500px;border:0px solid #ccc;}
+            #container .box1{widows: 600px;;height:500px;float: left;}
+            #container .box2{margin-left: 40px;width:600px;height:500px;float:left;}
+        </style>
+    </head>
 <body>
+    
+
+    <div id="container">
+        <div class="box1">
+            <h1>Input JSON</h1>
+            <textarea id="input_json" rows="20" cols="70"></textarea>
+        </div>
+        <div class="box2">
+            <h1>Output JSON</h1>
+            <textarea id="output_json" rows="20" cols="70"></textarea>
+        </div>
+    </div>
+    <button id="sample_btn" onclick="Sample()">Show me some sample input</button>
+
+    <h1>Transfer</h1>
+    <h2>Amount</h2><textarea id="coin_amount"></textarea>
+    <h2>From</h2><textarea id="from_addr"></textarea>
+    <h2>To</h2><textarea id="to_addr"></textarea>
+    <button id="transfer_btn" onclick="TransferA2B()">Transfer!</button>
+
+    
+
     <script src="json_handler.js"></script>
 
     <script>
         // Your contract in JSON format
-        var myJSON = '{"name": "1JaB9WqLm8zqTnX6bjWfRqRKacKXnpJvuo","totalSupply": 5000,"ownerAddress": "13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3","hash": "dqzzrzwfgurkeplhjienubimst","mapping": {"13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3": 100},"id": "dqzzrzwfgurkeplhjienubimst"}';
-        
+        // var myJSON = '{"name": "1JaB9WqLm8zqTnX6bjWfRqRKacKXnpJvuo","totalSupply": 5000,"ownerAddress": "13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3","hash": "dqzzrzwfgurkeplhjienubimst","mapping": {"13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3": 100},"id": "dqzzrzwfgurkeplhjienubimst"}';
+        var myJSON = document.getElementById('input_json').value;
         // Get an instance - MyContract, from json_handler.js
         var instance = new Module.MyContract(myJSON);
+        
 
+
+        function TransferA2B() {
+            var from_addr = document.getElementById('from_addr').value;
+            var to_addr = document.getElementById('to_addr').value;
+            var amount = document.getElementById('coin_amount').value;
+            var contractAfterTransfer = instance.TransferCoin_A2B(from_addr, to_addr, parseInt(amount));
+
+            document.getElementById('output_json').value = contractAfterTransfer;
+            PrettyPrint("input_json");
+            PrettyPrint("output_json");
+            
+        }
+
+        function Sample() {
+            var myJSON = '{"name": "1JaB9WqLm8zqTnX6bjWfRqRKacKXnpJvuo","totalSupply": 5000,"ownerAddress": "13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3","hash": "dqzzrzwfgurkeplhjienubimst","mapping": {"13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3": 100},"id": "dqzzrzwfgurkeplhjienubimst"}';
+            var obj = JSON.parse(myJSON);
+            var pretty = JSON.stringify(obj, undefined, 4);
+            document.getElementById("input_json").value = pretty;
+        }
+
+        function PrettyPrint(textArea_id) {
+            var ugly = document.getElementById(textArea_id).value;
+            var obj = JSON.parse(ugly);
+            var pretty = JSON.stringify(obj, undefined, 4);
+            document.getElementById(textArea_id).value = pretty;
+        }
         /*  
             GetMyContract()-
             description:     Display the current contract in instance
             Input:           -none-
             Output:          a JSON about the current contract in string
         */
-        var initial_JSON = instance.GetMyContract();
-        document.write("Your current contract in C++ class:");
-        document.write("<br>");
-        document.write(initial_JSON);
-        document.write("<br><br><br>");
+        // var initial_JSON = instance.GetMyContract();
+        // document.write("Your current contract in C++ class:");
+        // document.write("<br>");
+        // document.write(initial_JSON);
+        // document.write("<br><br><br>");
 
         /*
             GetBalance(string address)- 
@@ -29,11 +85,11 @@
             Input:           An address in string
             Output:          An integer of address's balance
         */
-        var balance = instance.GetBalance("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3");
-        document.write("Your current balance in C++ contract:");
-        document.write("<br>");
-        document.write(balance);
-        document.write("<br><br><br>");
+        // var balance = instance.GetBalance("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3");
+        // document.write("Your current balance in C++ contract:");
+        // document.write("<br>");
+        // document.write(balance);
+        // document.write("<br><br><br>");
 
         /* 
             TransferCoin_A2B(string A, string B, int x)-
@@ -41,28 +97,28 @@
             Input:           address A, address B, x coin
             Output:          a JSON about the current contract in string
         */
-        var contractAfterTransfer = instance.TransferCoin_A2B("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3", "1338vM2p3wSm5ma3tNXGJRWAhbuJUTZ9du", 200);
-        document.write("Your contract after transfer 5 coins value:");
-        document.write("<br>");
-        document.write(contractAfterTransfer);
-        document.write("<br><br><br>");
+        // var contractAfterTransfer = instance.TransferCoin_A2B("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3", "1338vM2p3wSm5ma3tNXGJRWAhbuJUTZ9du", 200);
+        // document.write("Your contract after transfer 5 coins value:");
+        // document.write("<br>");
+        // document.write(contractAfterTransfer);
+        // document.write("<br><br><br>");
 
 
 
-        var balance = instance.GetBalance("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3");
-        document.write("Your current balance after transfer 5 coins in C++ contract:");
-        document.write("<br>");
-        document.write(balance);
-        document.write("<br><br><br>");
+        // var balance = instance.GetBalance("13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3");
+        // document.write("Your current balance after transfer 5 coins in C++ contract:");
+        // document.write("<br>");
+        // document.write(balance);
+        // document.write("<br><br><br>");
 
         
         
 
-        var final_JSON = instance.GetMyContract();
-        document.write("Your final contract state in C++ class:");
-        document.write("<br>");
-        document.write(final_JSON);
-        document.write("<br><br><br>");
+        // var final_JSON = instance.GetMyContract();
+        // document.write("Your final contract state in C++ class:");
+        // document.write("<br>");
+        // document.write(final_JSON);
+        // document.write("<br><br><br>");
 
 
     </script>
