@@ -19,6 +19,7 @@ using namespace emscripten;
 // ERROR number
 #define INSUFFICIENT_BALANCE "001"
 #define ADDRESS_NOT_FOUND "002"
+#define INVALID_AMOUNT "003"
 #define VALUE_NOT_FOUND -1
 
 
@@ -198,8 +199,14 @@ void MyContract::Add_KeyString(const std::string& name2, const std::string& str_
  * Output:  Current contract state in JSON format
 */ 
 std::string MyContract::TransferCoin_A2B(const std::string& A, const std::string& B, const int& transferValue) {
+    if(transferValue <= 0) {
+        return INVALID_AMOUNT;
+    }
     if((*_mapping).HasMember(A.c_str())) {
         // if Address A exist
+        if((*_mapping)[A.c_str()].GetInt() < transferValue) {
+            return INSUFFICIENT_BALANCE;
+        }
         if((*_mapping).HasMember(B.c_str())) {
             // if Address B exist, Change B's balance
             (*_mapping)[B.c_str()].SetInt((*_mapping)[B.c_str()].GetInt()+transferValue);

@@ -3,9 +3,9 @@
     <head><title>WebAssembly test</title><meta charset='utf-8'>
         <style type="text/css">
             div{margin:0;padding:0;border-color: transparent;}
-            #container{width:1500px;height:500px;border:0px solid #ccc;}
-            #container .box1{widows: 600px;;height:500px;float: left;}
-            #container .box2{margin-left: 40px;width:600px;height:500px;float:left;}
+            #container{width:1500px;height:400px;border:0px solid #ccc;}
+            #container .box1{widows: 600px;;height:400px;float: left;}
+            #container .box2{margin-left: 40px;width:600px;height:400px;float:left;}
         </style>
     </head>
 <body>
@@ -47,11 +47,23 @@
             var to_addr = document.getElementById('to_addr').value;
             var amount = document.getElementById('coin_amount').value;
             var contractAfterTransfer = instance.TransferCoin_A2B(from_addr, to_addr, parseInt(amount));
-
-            document.getElementById('output_json').value = contractAfterTransfer;
-            PrettyPrint("input_json");
-            PrettyPrint("output_json");
-            
+            if (contractAfterTransfer == "001") {
+                document.getElementById('output_json').value = "INSUFFICIENT BALANCE";
+                return;
+            }
+            else if (contractAfterTransfer == "002") {
+                document.getElementById('output_json').value = "ADDRESS NOT FOUND";
+                return;
+            }
+            else if (contractAfterTransfer == "003") {
+                document.getElementById('output_json').value = "AMOUNT SHOULD BE >= 0";
+                return;
+            }
+            else {
+                document.getElementById('output_json').value = contractAfterTransfer;
+                PrettyPrint("input_json");
+                PrettyPrint("output_json");
+            }
         }
 
         function Sample() {
