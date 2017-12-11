@@ -4,10 +4,10 @@ Pack a smart contract in a C++ class, and handle input/output states as JSON for
 # Usage
 ## Quick start
 1. Clone this repo `$ git clone https://github.com/jack77121/WebAssemblyRapidJSONExp.git`.
-2. Go into the directory `$ cd WebAssemblyRapidJSONExp`.
+2. Go into the directory `$ cd WebAssemblyRapidJSONExp` and check out the `contract` branch `$ git checkout contract`.
 3. Start a python simple server (or any other server you love) `$ python -m SimpleHTTPServer 8001`, 8001 is the port number, change it as you like.
 4. Open a browser (I used FirefoxDeveloperEdition for the repo), go to `http://localhost:8001/TransferFunctionSample.html`, 8001 is the port number, should be the same in step 3.
-3. You should see a sample result right now in your browser, open `TransferFunctionSample.html` in your favorite editor, and get more detail about how to use it in your own project.
+5. You should see a sample result right now in your browser, open `TransferFunctionSample.html` in your favorite editor, and get more detail about how to use it in your own project.
 
 ## Customer start
 (coming soon)
@@ -18,6 +18,7 @@ Pack a smart contract in a C++ class, and handle input/output states as JSON for
 | ------| ------ |
 | 001 | INSUFFICIENT_BALANCE |
 | 002 | ADDRESS_NOT_FOUND |
+| 003 | INVALID_AMOUNT |
 
 # Function
 
