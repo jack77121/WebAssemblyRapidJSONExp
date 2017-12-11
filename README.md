@@ -13,6 +13,12 @@ Pack a smart contract in a C++ class, and handle input/output states as JSON for
 (coming soon)
 <!-- Include `json_handler.js`, ex. `<script src="json_handler.js"></script>` in your html.  -->
 
+## Error code
+| Error code | Description |
+| ------| ------ |
+| 001 | INSUFFICIENT_BALANCE |
+| 002 | ADDRESS_NOT_FOUND |
+
 # Function
 
 ## std::string MyContract::TransferCoin_A2B(const std::string& A, const std::string& B, const int& transferValue)
