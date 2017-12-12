@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head><title>WebAssembly test</title><meta charset='utf-8'>
+        <style type="text/css">
+            div{margin:0;padding:0;border-color: transparent;}
+            #container{width:1500px;height:400px;border:0px solid #ccc;}
+            #container .box1{widows: 600px;;height:400px;float: left;}
+            #container .box2{margin-left: 40px;width:600px;height:400px;float:left;}
+        </style>
+    </head>
+<body>
+    
+
+    <div id="container">
+        <div class="box1">
+            <h1>Input JSON</h1>
+            <textarea id="input_json" rows="20" cols="70"></textarea>
+        </div>
+        <div class="box2">
+            <h1>Your current contract name</h1>
+            <textarea id="output_json" rows="20" cols="70"></textarea>
+        </div>
+    </div>
+
+    <button id="getname_btn" onclick="GetName()">Get the Name!</button>
+
+    
+
+    <script src="json_handler.js"></script>
+
+    <script>
+        Sample();
+        
+        
+
+        // GetName function, call instance's GetName function XD
+        function GetName() {
+            // Your contract in JSON format
+            var myJSON = document.getElementById('input_json').value;
+            // Get an instance - MyContract, from json_handler.js
+            var instance = new Module.MyContract(myJSON);
+            var contractName = instance.GetName();
+            if (contractName) {
+                document.getElementById('output_json').value = contractName;
+                PrettyPrint("output_json");
+            }
+            else {
+                document.getElementById('output_json').value = "This contract doesn't have a name";
+            }
+        }
+        // Generate sample input JSON
+        function Sample() {
+            var myJSON = '{"name": "1JaB9WqLm8zqTnX6bjWfRqRKacKXnpJvuo","totalSupply": 5000,"ownerAddress": "13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3","hash": "dqzzrzwfgurkeplhjienubimst","mapping": {"13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3": 100},"id": "dqzzrzwfgurkeplhjienubimst"}';
+            var obj = JSON.parse(myJSON);
+            var pretty = JSON.stringify(obj, undefined, 4);
+            document.getElementById("input_json").value = pretty;
+        }
+        
+        // Make JSON format prettier!
+        function PrettyPrint(textArea_id) {
+            var ugly = document.getElementById(textArea_id).value;
+            var obj = JSON.parse(ugly);
+            var pretty = JSON.stringify(obj, undefined, 4);
+            document.getElementById(textArea_id).value = pretty;
+        }
+
+
+    </script>
+
+</body>
+
+</html>
