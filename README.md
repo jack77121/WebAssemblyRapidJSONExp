@@ -22,7 +22,13 @@ Pack a smart contract in a C++ class, and handle input/output states as JSON for
 
 # Function
 
-## std::string MyContract::TransferCoin_A2B(const std::string& A, const std::string& B, const int& transferValue)
+## std::string MyContract::GetName()
+
+* DESC      - Get the name of the contract
+* Input     - (void)
+* Output    - Current contract's name
+
+## std::string MyContract::Transfer(const std::string& A, const std::string& B, const int& transferValue)
 
  * DESC     - Transfer Coin from A address to B address
  * Input    - A's address, B's address, Transfer amount
