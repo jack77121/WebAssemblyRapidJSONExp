@@ -27,7 +27,7 @@
     <h2>Amount</h2><textarea id="coin_amount"></textarea>
     <h2>From</h2><textarea id="from_addr"></textarea>
     <h2>To</h2><textarea id="to_addr"></textarea>
-    <button id="transfer_btn" onclick="TransferA2B()">Transfer!</button>
+    <button id="transfer_btn" onclick="Transfer()">Transfer!</button>
 
     
 
@@ -42,11 +42,11 @@
         
 
 
-        function TransferA2B() {
+        function Transfer() {
             var from_addr = document.getElementById('from_addr').value;
             var to_addr = document.getElementById('to_addr').value;
             var amount = document.getElementById('coin_amount').value;
-            var contractAfterTransfer = instance.TransferCoin_A2B(from_addr, to_addr, parseInt(amount));
+            var contractAfterTransfer = instance.Transfer(from_addr, to_addr, parseInt(amount));
             if (contractAfterTransfer == "001") {
                 document.getElementById('output_json').value = "INSUFFICIENT BALANCE";
                 return;
