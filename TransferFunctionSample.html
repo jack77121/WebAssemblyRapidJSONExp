@@ -3,9 +3,10 @@
     <head><title>WebAssembly test</title><meta charset='utf-8'>
         <style type="text/css">
             div{margin:0;padding:0;border-color: transparent;}
-            #container{width:1500px;height:400px;border:0px solid #ccc;}
+            #container{width:1800px;height:400px;border:0px solid #ccc;}
             #container .box1{widows: 600px;;height:400px;float: left;}
-            #container .box2{margin-left: 40px;width:600px;height:400px;float:left;}
+            #container .box2{margin-left: 40px;width:442px;height:400px;float:left;}
+            #container .box3{margin-left: 40px;width:442px;height:400px;float:left;}
         </style>
     </head>
 <body>
@@ -19,6 +20,23 @@
         <div class="box2">
             <h1>Output JSON</h1>
             <textarea id="output_json" rows="20" cols="70"></textarea>
+        </div>
+        <div class="box2">
+            <h1>Function test</h1>
+            <p>
+                GetName:<br>
+                <span id="contract_name"></span><br><br>
+                GetSupply:<br>
+                <span id="contract_supply"></span><br><br>
+                GetOwnerAddress:<br>
+                <span id="contract_owner_addr"></span><br><br>
+                GetPrevHash:<br>
+                <span id="contract_prevhash"></span><br><br>
+                GetID:<br>
+                <span id="contract_id"></span><br><br>
+            </p>
+
+            
         </div>
     </div>
 
@@ -37,8 +55,10 @@
         Sample();
         // Your contract in JSON format
         var myJSON = document.getElementById('input_json').value;
+        console.debug('myJSON: ', myJSON)
         // Get an instance - MyContract, from json_handler.js
         var instance = new Module.MyContract(myJSON);
+        console.debug('INSTANCE:', instance)
         
 
 
@@ -64,10 +84,18 @@
                 PrettyPrint("input_json");
                 PrettyPrint("output_json");
             }
+            document.getElementById("contract_name").innerHTML = instance.GetName();
+            document.getElementById("contract_supply").innerHTML = instance.GetSupply();
+            document.getElementById("contract_owner_addr").innerHTML = instance.GetOwnerAddress();
+            document.getElementById("contract_prevhash").innerHTML = instance.GetPrevHash();
+            document.getElementById("contract_id").innerHTML = instance.GetID();
+
+
+            
         }
 
         function Sample() {
-            var myJSON = '{"name": "1JaB9WqLm8zqTnX6bjWfRqRKacKXnpJvuo","totalSupply": 5000,"ownerAddress": "13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3","hash": "dqzzrzwfgurkeplhjienubimst","mapping": {"13cf2hix5vXj4RPzWe6gT9pqRzXsGLJYx3": 100},"id": "dqzzrzwfgurkeplhjienubimst"}';
+            var myJSON = '{"name":"Contract 5","totalSupply":10000,"ownerAddress":"1Fg2kbysC84T1Z1gVf43n4i1iRQ6xmdcW8","id":"kcpwytkjgysjrglhakogyamcrt","mapping":{"18iTFSstr9ybuai8Gf6MMCJDB7sy9jrsxB":200,"1YRcFjmwES39mZyeKTswpiiay2b65e3WD":350,"1Fg2kbysC84T1Z1gVf43n4i1iRQ6xmdcW8":9350,"168smKpvzU2p6uqvfvipu4HGDKKkuQUqQB":100},"previousHash":"QmQwxjpoN6yrpyN5A7th51ZpJS8yp1CLXBTXTqBj8Byv2s"}';
             var obj = JSON.parse(myJSON);
             var pretty = JSON.stringify(obj, undefined, 4);
             document.getElementById("input_json").value = pretty;
@@ -79,6 +107,7 @@
             var pretty = JSON.stringify(obj, undefined, 4);
             document.getElementById(textArea_id).value = pretty;
         }
+
         /*  
             GetMyContract()-
             description:     Display the current contract in instance

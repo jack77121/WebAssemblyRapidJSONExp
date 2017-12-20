@@ -26,10 +26,10 @@ MyContract::MyContract(const std::string& temp){
     }
     // Hash
     if(_myJSONDoc.HasMember(CONTRACT_HASH)) {
-        _hash = &_myJSONDoc[CONTRACT_HASH];    
+        _preHash = &_myJSONDoc[CONTRACT_HASH];    
     }
     else{
-        _hash = nullptr;
+        _preHash = nullptr;
     }
     // Mapping
     if(_myJSONDoc.HasMember(MAP)) {
@@ -58,6 +58,21 @@ int MyContract::GetSupply() {
     return tempSup;
 }
 
+std::string MyContract::GetOwnerAddress() {
+    std::string tempAddr = _ownerAddr->GetString();
+    return tempAddr;
+}
+
+std::string MyContract::GetPrevHash() {
+    std::string tempPrevHash = _preHash->GetString();
+    return tempPrevHash;
+}
+
+std::string MyContract::GetID() {
+    std::string tempID = _id->GetString();
+    return tempID;
+}
+
 int MyContract::GetBalance(const std::string& findName) {
     if(_mapping->HasMember(findName.c_str())) {
         int valueOfName = (*_mapping)[findName.c_str()].GetInt();
@@ -68,6 +83,9 @@ int MyContract::GetBalance(const std::string& findName) {
     }
      
 }
+
+
+
 // JSON array
 // int MyContract::GetMap2(const std::string& findName) {
 //     for (Value::ConstValueIterator arrayitr = _map2->Begin(); arrayitr != _map2->End(); ++arrayitr) {
@@ -172,6 +190,9 @@ EMSCRIPTEN_BINDINGS(module) {
     .constructor<const std::string&>()
     .function("GetName", &MyContract::GetName)
     .function("GetSupply", &MyContract::GetSupply)
+    .function("GetOwnerAddress", &MyContract::GetOwnerAddress)
+    .function("GetPrevHash", &MyContract::GetPrevHash)
+    .function("GetID", &MyContract::GetID)
     .function("GetBalance", &MyContract::GetBalance)
     // .function("GetMap2", &MyContract::GetMap2)
     .function("GetMyContract", &MyContract::GetMyContract)

@@ -15,7 +15,7 @@ using namespace emscripten;
 #define NAME "name"
 #define TOTAL_SUP "totalSupply"
 #define OWNER_ADDR "ownerAddress"
-#define CONTRACT_HASH "hash"
+#define CONTRACT_HASH "previousHash"
 #define MAP "mapping"
 #define ID "id"
 
@@ -34,7 +34,11 @@ public:
     // Read
     std::string GetName();
     int         GetSupply();
+    std::string GetOwnerAddress();
+    std::string GetPrevHash();
+    std::string GetID();
     int         GetBalance(const std::string&);
+    
     // int         GetMap2(const std::string&);
     std::string GetMyContract();
 
@@ -63,7 +67,7 @@ private:
     Value*      _name;
     Value*      _total_supply;
     Value*      _ownerAddr;
-    Value*      _hash;
+    Value*      _preHash;
     Value*      _mapping;
     Value*      _id;
 
